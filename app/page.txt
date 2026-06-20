@@ -1,0 +1,1567 @@
+'use client';
+
+import React, { ChangeEvent, useMemo, useState } from 'react';
+
+type ThemeKey =
+  | 'heritage'
+  | 'paperGold'
+  | 'ivoryNavy'
+  | 'softHeirloom'
+  | 'warmWalnut'
+  | 'modernKeepsake';
+
+type Theme = {
+  key: ThemeKey;
+  name: string;
+  description: string;
+  colors: {
+    bg: string;
+    paper: string;
+    soft: string;
+    text: string;
+    muted: string;
+    gold: string;
+    goldDark: string;
+    accent: string;
+    footer: string;
+  };
+};
+
+const themes: Theme[] = [
+  {
+    key: 'heritage',
+    name: 'Heritage Memoir',
+    description: 'Warm, timeless, memoir-focused and premium.',
+    colors: {
+      bg: '#F7F1E7',
+      paper: '#EFE3D0',
+      soft: '#FAF6EF',
+      text: '#2A211B',
+      muted: '#B9A58C',
+      gold: '#B08D57',
+      goldDark: '#8E6F3E',
+      accent: '#C9A48A',
+      footer: '#4A3828',
+    },
+  },
+  {
+    key: 'paperGold',
+    name: 'Paper & Gold',
+    description: 'Old paper, faded gold, sepia memoir feeling.',
+    colors: {
+      bg: '#F3E7D2',
+      paper: '#E7D6BA',
+      soft: '#FAF6EF',
+      text: '#4A3828',
+      muted: '#CBB89D',
+      gold: '#B9965A',
+      goldDark: '#8E6F3E',
+      accent: '#D4AF7A',
+      footer: '#4A3828',
+    },
+  },
+  {
+    key: 'ivoryNavy',
+    name: 'Ivory + Navy Accent',
+    description: 'Refined, trustworthy, clean and premium.',
+    colors: {
+      bg: '#F7F1E7',
+      paper: '#EFE3D0',
+      soft: '#FAF6EF',
+      text: '#0D1B2A',
+      muted: '#D8CABC',
+      gold: '#D4AF7A',
+      goldDark: '#A88446',
+      accent: '#C9A48A',
+      footer: '#0D1B2A',
+    },
+  },
+  {
+    key: 'softHeirloom',
+    name: 'Soft Heirloom',
+    description: 'Sentimental, soft, gift-ready and emotional.',
+    colors: {
+      bg: '#FAF4EA',
+      paper: '#E8CFC3',
+      soft: '#FFF8F1',
+      text: '#5A4637',
+      muted: '#DCC7A5',
+      gold: '#C9A48A',
+      goldDark: '#A97976',
+      accent: '#B9857E',
+      footer: '#5A4637',
+    },
+  },
+  {
+    key: 'warmWalnut',
+    name: 'Warm Walnut Editorial',
+    description: 'Crafty, editorial, handmade and elegant.',
+    colors: {
+      bg: '#F7F1E7',
+      paper: '#FAF6EF',
+      soft: '#EFE3D0',
+      text: '#4A3828',
+      muted: '#B9A58C',
+      gold: '#B08D57',
+      goldDark: '#8E6F3E',
+      accent: '#C9A48A',
+      footer: '#4A3828',
+    },
+  },
+  {
+    key: 'modernKeepsake',
+    name: 'Modern Keepsake',
+    description: 'Clean ecommerce, soft modern, warm but fresh.',
+    colors: {
+      bg: '#FAFAF7',
+      paper: '#EFE8DD',
+      soft: '#FFFFFF',
+      text: '#2F2F2B',
+      muted: '#BDB0A1',
+      gold: '#C9A35A',
+      goldDark: '#9D7A35',
+      accent: '#B98E7E',
+      footer: '#B98E7E',
+    },
+  },
+];
+
+const sizes = [
+  '2x2 Square',
+  '2.5x2.5 Square',
+  '3x3 Square',
+  '2x3 Rectangle',
+  '2.5x3.5 Rectangle',
+  '2.25 Round',
+  '3 Round',
+];
+
+const packs = [
+  { label: '5-Gem Story Set', count: 5, note: 'A few favorite moments.' },
+  { label: '9-Gem Memory Set', count: 9, note: 'Perfect for family, pets, trips, and milestones.' },
+  { label: '12-Gem Chapter Set', count: 12, note: 'A fuller story told in little pieces.' },
+  { label: '25-Gem Legacy Set', count: 25, note: 'For events, memorials, gifts, and family collections.' },
+  { label: '50-Gem Bulk Set', count: 50, note: 'For businesses, weddings, schools, restaurants, and teams.' },
+];
+
+const lifeEvents = [
+  'Family Gems',
+  'Pet Gems',
+  'Wedding Gems',
+  'Baby & Milestone Gems',
+  'Memorial Gems',
+  'Travel Gems',
+  'Graduation Gems',
+  'Holiday Gift Sets',
+];
+
+const b2bProducts = [
+  'Restaurant QR Magnets',
+  'Business Card Magnets',
+  'Realtor Magnets',
+  'Salon Magnets',
+  'Contractor Magnets',
+  'Wedding Favors',
+  'School Magnets',
+  'Event Keepsakes',
+];
+
+function cssVars(theme: Theme) {
+  return {
+    '--mg-bg': theme.colors.bg,
+    '--mg-paper': theme.colors.paper,
+    '--mg-soft': theme.colors.soft,
+    '--mg-text': theme.colors.text,
+    '--mg-muted': theme.colors.muted,
+    '--mg-gold': theme.colors.gold,
+    '--mg-gold-dark': theme.colors.goldDark,
+    '--mg-accent': theme.colors.accent,
+    '--mg-footer': theme.colors.footer,
+  } as React.CSSProperties;
+}
+
+export default function MemoirGemsLandingPage() {
+  const [themeKey, setThemeKey] = useState<ThemeKey>('heritage');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedPack, setSelectedPack] = useState(packs[1]);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [zoom, setZoom] = useState(1);
+  const [rotate, setRotate] = useState(0);
+  const [rightsConfirmed, setRightsConfirmed] = useState(false);
+  const [socialPermission, setSocialPermission] = useState(false);
+
+  const theme = themes.find((item) => item.key === themeKey) ?? themes[0];
+  const requiredPhotoCount = selectedPack.count;
+  const completedPhotoCount = photoUrls.filter(Boolean).length;
+
+  const canAddToCart =
+    Boolean(selectedSize) &&
+    completedPhotoCount >= requiredPhotoCount &&
+    rightsConfirmed;
+
+  const selectedPrice = useMemo(() => {
+    const base = selectedPack.count * 3.45;
+    const sizeExtra =
+      selectedSize.includes('3x3') || selectedSize.includes('3 Round') ? 8 : 0;
+
+    return `$${(base + sizeExtra).toFixed(2)}`;
+  }, [selectedPack, selectedSize]);
+
+  function handlePhotos(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files ?? []);
+    const urls = files
+      .slice(0, requiredPhotoCount)
+      .map((file) => URL.createObjectURL(file));
+
+    setPhotoUrls(urls);
+  }
+
+  return (
+    <main className="mg-page" style={cssVars(theme)}>
+      <section className="mg-theme-panel">
+        <div>
+          <p className="mg-eyebrow">Color system</p>
+          <h1>{theme.name}</h1>
+          <p>{theme.description}</p>
+        </div>
+
+        <div className="mg-theme-grid">
+          {themes.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={`mg-theme-card ${item.key === themeKey ? 'is-active' : ''}`}
+              onClick={() => setThemeKey(item.key)}
+            >
+              <span
+                className="mg-theme-swatch"
+                style={{
+                  background: `linear-gradient(135deg, ${item.colors.bg}, ${item.colors.gold}, ${item.colors.footer})`,
+                }}
+              />
+              <span>{item.name}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="mg-shell">
+        <div className="mg-announcement">
+          ♡ Handcrafted photo keepsakes made from your most meaningful moments | Free shipping on orders over $75
+        </div>
+
+        <header className="mg-header">
+          <a className="mg-logo" href="#">
+            <span className="mg-logo-mark">◇</span>
+            <span>
+              Memoir Gems
+              <small>Little treasures from your life story</small>
+            </span>
+          </a>
+
+          <nav className="mg-nav" aria-label="Main navigation">
+            <a href="#shop">Shop</a>
+            <a href="#custom">Custom Photo Gems</a>
+            <a href="#life-events">Life Events</a>
+            <a href="#b2b">B2B</a>
+            <a href="#story">Our Story</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+
+          <div className="mg-icons" aria-hidden="true">
+            <span>⌕</span>
+            <span>♡</span>
+            <span>🛒</span>
+          </div>
+        </header>
+
+        <section className="mg-hero">
+          <div className="mg-hero-copy">
+            <p className="mg-eyebrow">Custom photo magnets · Handmade keepsakes</p>
+            <h2>The moments worth keeping, made tangible.</h2>
+            <p>
+              Handcrafted custom photo magnets made from the people, pets, places, and memories that shaped your story.
+            </p>
+
+            <div className="mg-actions">
+              <a className="mg-button" href="#custom">Create Your Gems</a>
+              <a className="mg-button mg-button-secondary" href="#life-events">Shop Life Events</a>
+            </div>
+          </div>
+
+          <div className="mg-hero-art">
+            <div className="mg-photo-stack">
+              <div className="mg-magnet mg-magnet-one">Family<br />Gem</div>
+              <div className="mg-magnet mg-magnet-two">Pet<br />Gem</div>
+              <div className="mg-magnet mg-magnet-three">Wedding<br />Gem</div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mg-trust-row">
+          <article>
+            <strong>Made with meaning</strong>
+            <span>Personal photos turned into keepsakes.</span>
+          </article>
+          <article>
+            <strong>Upload & preview</strong>
+            <span>Choose, crop, zoom, rotate, and review.</span>
+          </article>
+          <article>
+            <strong>Gift-ready</strong>
+            <span>Warm packaging, care card, optional note.</span>
+          </article>
+          <article>
+            <strong>B2B ready</strong>
+            <span>Restaurants, events, realtors, schools, and local brands.</span>
+          </article>
+        </section>
+
+        <section id="custom" className="mg-section mg-custom">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">Simple custom ordering flow</p>
+            <h2>Create Your Custom Memoir Gems</h2>
+            <p>
+              Choose your size, pick your story set, upload your photos, crop and preview each image, then checkout.
+              We craft, pack, and ship your Gems.
+            </p>
+          </div>
+
+          <div className="mg-configurator">
+            <div className="mg-config-panel">
+              <h3>1. Choose your Gem size</h3>
+
+              <div className="mg-chip-grid">
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    className={`mg-chip ${selectedSize === size ? 'is-active' : ''}`}
+                    onClick={() => setSelectedSize(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+
+              <h3>2. Choose your story set</h3>
+
+              <div className="mg-pack-list">
+                {packs.map((pack) => (
+                  <button
+                    key={pack.label}
+                    type="button"
+                    className={`mg-pack ${selectedPack.label === pack.label ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setSelectedPack(pack);
+                      setPhotoUrls([]);
+                    }}
+                  >
+                    <span>{pack.label}</span>
+                    <small>{pack.note}</small>
+                  </button>
+                ))}
+              </div>
+
+              <h3>3. Upload your photos</h3>
+
+              <label className="mg-upload">
+                <input type="file" accept="image/*" multiple onChange={handlePhotos} />
+                <span>Upload pictures</span>
+                <small>
+                  Required: {requiredPhotoCount} photos · Uploaded: {completedPhotoCount}
+                </small>
+              </label>
+
+              <div className="mg-edit-controls">
+                <label>
+                  Zoom
+                  <input
+                    type="range"
+                    min="1"
+                    max="1.8"
+                    step="0.05"
+                    value={zoom}
+                    onChange={(e) => setZoom(Number(e.target.value))}
+                  />
+                </label>
+
+                <label>
+                  Rotate
+                  <input
+                    type="range"
+                    min="-12"
+                    max="12"
+                    step="1"
+                    value={rotate}
+                    onChange={(e) => setRotate(Number(e.target.value))}
+                  />
+                </label>
+              </div>
+
+              <label className="mg-checkbox">
+                <input
+                  type="checkbox"
+                  checked={rightsConfirmed}
+                  onChange={(e) => setRightsConfirmed(e.target.checked)}
+                />
+                I confirm I own or have permission to use these photos.
+              </label>
+
+              <label className="mg-checkbox">
+                <input
+                  type="checkbox"
+                  checked={socialPermission}
+                  onChange={(e) => setSocialPermission(e.target.checked)}
+                />
+                Memoir Gems may feature my order on social media.
+              </label>
+
+              <div className="mg-cart-box">
+                <div>
+                  <span>Estimated total</span>
+                  <strong>{selectedPrice}</strong>
+                </div>
+
+                <button type="button" className="mg-button" disabled={!canAddToCart}>
+                  {canAddToCart ? 'Add to Cart' : 'Complete Your Gems'}
+                </button>
+              </div>
+            </div>
+
+            <div className="mg-preview-panel">
+              <div className="mg-preview-header">
+                <h3>Preview your Gems</h3>
+                <p>
+                  {selectedSize || 'Select a size'} · {selectedPack.label}
+                </p>
+              </div>
+
+              <div className="mg-preview-grid">
+                {Array.from({ length: Math.min(requiredPhotoCount, 12) }).map((_, index) => {
+                  const url = photoUrls[index];
+
+                  return (
+                    <div
+                      key={index}
+                      className={`mg-preview-slot ${selectedSize.includes('Round') ? 'is-round' : ''}`}
+                    >
+                      {url ? (
+                        <img
+                          src={url}
+                          alt={`Uploaded photo ${index + 1}`}
+                          style={{
+                            transform: `scale(${zoom}) rotate(${rotate}deg)`,
+                          }}
+                        />
+                      ) : (
+                        <span>Photo {index + 1}</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {requiredPhotoCount > 12 && (
+                <p className="mg-preview-note">
+                  Showing first 12 preview slots. Your selected pack requires {requiredPhotoCount} photos.
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section id="shop" className="mg-section">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">Finished products only</p>
+            <h2>Shop Custom Photo Gems</h2>
+            <p>
+              No machines. No courses. No supplies. Just handcrafted magnets made from your photos.
+            </p>
+          </div>
+
+          <div className="mg-product-grid">
+            {[
+              ['Square Photo Gems', '2x2, 2.5x2.5, and 3x3 keepsake magnets.'],
+              ['Rectangle Photo Gems', 'Beautiful for portraits, pets, couples, and travel memories.'],
+              ['Round Memory Gems', 'Soft medallion-style magnets for emotional moments.'],
+              ['Gift Sets', 'Ready-to-give sets for family, holidays, milestones, and love stories.'],
+              ['Memorial Gems', 'Thoughtful remembrance magnets for loved ones and pets.'],
+              ['Business Gems', 'QR menus, local promotions, events, and client gifts.'],
+            ].map(([title, copy]) => (
+              <article key={title} className="mg-product-card">
+                <div className="mg-product-image">{title.split(' ')[0]}</div>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+                <a href="#custom">Create yours →</a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="life-events" className="mg-section mg-soft-section">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">Life events</p>
+            <h2>Made for the memories that matter most.</h2>
+            <p>
+              Memoir Gems are designed around real chapters of life — not generic prints.
+            </p>
+          </div>
+
+          <div className="mg-life-grid">
+            {lifeEvents.map((event) => (
+              <article key={event} className="mg-life-card">
+                <span>♡</span>
+                <h3>{event}</h3>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mg-section mg-how">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">How it works</p>
+            <h2>Upload. Crop. Preview. Treasure.</h2>
+          </div>
+
+          <div className="mg-steps">
+            {[
+              'Choose your Gem size',
+              'Choose your story set',
+              'Upload your photos',
+              'Crop and preview each image',
+              'Checkout securely',
+              'We craft, pack, and ship',
+            ].map((step, index) => (
+              <article key={step}>
+                <strong>{index + 1}</strong>
+                <span>{step}</span>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mg-section mg-packaging">
+          <div>
+            <p className="mg-eyebrow">Gift-ready packaging</p>
+            <h2>Made to feel personal from the moment it arrives.</h2>
+            <p>
+              Every order is carefully prepared with a warm, handcrafted presentation — designed to feel personal,
+              thoughtful, and ready to gift.
+            </p>
+          </div>
+
+          <div className="mg-packaging-list">
+            <span>Thank-you card</span>
+            <span>Care card</span>
+            <span>Paper wrap</span>
+            <span>Gold seal</span>
+            <span>Optional gift note</span>
+            <span>Optional premium box</span>
+          </div>
+        </section>
+
+        <section id="b2b" className="mg-section mg-b2b">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">B2B / bulk orders</p>
+            <h2>For businesses, events, and local brands.</h2>
+            <p>
+              Create custom magnets for menus, promotions, client gifts, weddings, schools, events, and local services.
+            </p>
+          </div>
+
+          <div className="mg-b2b-grid">
+            {b2bProducts.map((item) => (
+              <article key={item}>
+                <span>◇</span>
+                <h3>{item}</h3>
+              </article>
+            ))}
+          </div>
+
+          <div className="mg-center">
+            <a className="mg-button" href="mailto:contact@memoirgems.com">
+              Request a Custom Quote
+            </a>
+          </div>
+        </section>
+
+        <section id="story" className="mg-section mg-story">
+          <div>
+            <p className="mg-eyebrow">Our meaning</p>
+            <h2>Little treasures from your life story.</h2>
+          </div>
+
+          <p>
+            A memoir is not every detail of a life. It is the emotional moments, turning points, people, places,
+            and chapters that stay with us. Memoir Gems turns those moments into small magnetic keepsakes you can see,
+            touch, gift, and remember every day.
+          </p>
+        </section>
+
+        <section id="faq" className="mg-section mg-faq">
+          <div className="mg-section-heading">
+            <p className="mg-eyebrow">FAQ</p>
+            <h2>Questions before you create?</h2>
+          </div>
+
+          <div className="mg-faq-grid">
+            {[
+              [
+                'What kind of photos work best?',
+                'Bright, clear photos with faces centered work best. Avoid placing important details near the edges.',
+              ],
+              ['Can I use different photos in one pack?', 'Yes. Each magnet can use a different photo.'],
+              [
+                'Are these flexible magnets?',
+                'No. Memoir Gems are designed as premium keepsake photo magnets, not thin flexible promo magnets.',
+              ],
+              ['Can I crop my photos before checkout?', 'Yes. The page allows upload, zoom, rotate, and preview.'],
+              ['Do you offer gift packaging?', 'Yes. Gift-ready presentation is part of the Memoir Gems experience.'],
+              [
+                'Do you make business or event orders?',
+                'Yes. We offer B2B and bulk orders for restaurants, events, schools, realtors, and local brands.',
+              ],
+            ].map(([question, answer]) => (
+              <details key={question}>
+                <summary>{question}</summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <footer className="mg-footer">
+          <div>
+            <h2>Memoir Gems</h2>
+            <p>Handcrafted photo keepsakes from the moments worth keeping.</p>
+          </div>
+
+          <div>
+            <h3>Shop</h3>
+            <a href="#custom">Custom Photo Gems</a>
+            <a href="#life-events">Life Events</a>
+            <a href="#b2b">Business Orders</a>
+          </div>
+
+          <div>
+            <h3>Help</h3>
+            <a href="#faq">FAQ</a>
+            <a href="mailto:contact@memoirgems.com">Contact</a>
+            <a href="#">Shipping</a>
+          </div>
+
+          <div>
+            <h3>Stay close to the stories</h3>
+            <div className="mg-subscribe">
+              <input type="email" placeholder="Email address" />
+              <button type="button">Subscribe</button>
+            </div>
+          </div>
+        </footer>
+      </section>
+
+      <style jsx global>{`
+        .mg-page {
+          min-height: 100vh;
+          background:
+            radial-gradient(circle at top left, color-mix(in srgb, var(--mg-gold) 16%, transparent), transparent 32rem),
+            linear-gradient(180deg, var(--mg-bg), var(--mg-soft));
+          color: var(--mg-text);
+          padding: 28px;
+          font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+        }
+
+        .mg-page * {
+          box-sizing: border-box;
+        }
+
+        .mg-page a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .mg-theme-panel {
+          max-width: 1180px;
+          margin: 0 auto 24px;
+          display: grid;
+          grid-template-columns: 1fr 1.7fr;
+          gap: 22px;
+          align-items: end;
+        }
+
+        .mg-theme-panel h1,
+        .mg-hero h2,
+        .mg-section h2 {
+          font-family: Georgia, "Times New Roman", serif;
+          font-weight: 400;
+          letter-spacing: -0.04em;
+        }
+
+        .mg-theme-panel h1 {
+          margin: 0;
+          font-size: clamp(2.2rem, 5vw, 4.8rem);
+        }
+
+        .mg-theme-panel p {
+          color: color-mix(in srgb, var(--mg-text) 72%, transparent);
+          margin: 8px 0 0;
+        }
+
+        .mg-theme-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 10px;
+        }
+
+        .mg-theme-card {
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 45%, transparent);
+          background: color-mix(in srgb, var(--mg-soft) 78%, white);
+          color: var(--mg-text);
+          border-radius: 16px;
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          box-shadow: 0 10px 22px rgba(42, 33, 27, 0.06);
+        }
+
+        .mg-theme-card.is-active {
+          border-color: var(--mg-gold);
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--mg-gold) 18%, transparent);
+        }
+
+        .mg-theme-swatch {
+          width: 32px;
+          height: 32px;
+          border-radius: 10px;
+          border: 1px solid rgba(42, 33, 27, 0.12);
+          flex: 0 0 auto;
+        }
+
+        .mg-shell {
+          max-width: 1180px;
+          margin: 0 auto;
+          background: color-mix(in srgb, var(--mg-soft) 85%, white);
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 45%, transparent);
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 30px 90px rgba(42, 33, 27, 0.14);
+        }
+
+        .mg-announcement {
+          background: var(--mg-footer);
+          color: var(--mg-soft);
+          text-align: center;
+          padding: 10px 18px;
+          font-size: 0.8rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .mg-header {
+          min-height: 86px;
+          padding: 18px 34px;
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          align-items: center;
+          gap: 26px;
+          background: color-mix(in srgb, var(--mg-soft) 92%, white);
+          border-bottom: 1px solid color-mix(in srgb, var(--mg-muted) 35%, transparent);
+        }
+
+        .mg-logo {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          font-family: Georgia, "Times New Roman", serif;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-size: 1.25rem;
+        }
+
+        .mg-logo small {
+          display: block;
+          font-family: Inter, sans-serif;
+          font-size: 0.56rem;
+          letter-spacing: 0.18em;
+          color: var(--mg-gold-dark);
+          margin-top: 2px;
+        }
+
+        .mg-logo-mark {
+          color: var(--mg-gold);
+          font-size: 1.35rem;
+        }
+
+        .mg-nav,
+        .mg-icons {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .mg-nav a {
+          font-size: 0.76rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-weight: 700;
+        }
+
+        .mg-icons {
+          font-size: 1.25rem;
+        }
+
+        .mg-hero {
+          display: grid;
+          grid-template-columns: 0.95fr 1.05fr;
+          min-height: 520px;
+          background:
+            linear-gradient(90deg, color-mix(in srgb, var(--mg-bg) 96%, white), color-mix(in srgb, var(--mg-paper) 70%, transparent)),
+            radial-gradient(circle at 80% 45%, color-mix(in srgb, var(--mg-gold) 22%, transparent), transparent 20rem);
+        }
+
+        .mg-hero-copy {
+          padding: clamp(42px, 7vw, 86px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .mg-eyebrow {
+          color: var(--mg-gold-dark);
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          font-size: 0.76rem;
+          font-weight: 800;
+        }
+
+        .mg-hero h2 {
+          margin: 12px 0 18px;
+          font-size: clamp(3rem, 6vw, 6.1rem);
+          line-height: 0.94;
+        }
+
+        .mg-hero p {
+          max-width: 540px;
+          font-size: 1.08rem;
+          line-height: 1.75;
+          color: color-mix(in srgb, var(--mg-text) 78%, transparent);
+        }
+
+        .mg-actions {
+          display: flex;
+          gap: 12px;
+          margin-top: 24px;
+          flex-wrap: wrap;
+        }
+
+        .mg-button {
+          display: inline-flex;
+          min-height: 48px;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid var(--mg-gold);
+          background: var(--mg-gold);
+          color: white;
+          padding: 0 22px;
+          border-radius: 10px;
+          font-size: 0.8rem;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: 0.2s ease;
+        }
+
+        .mg-button:hover {
+          background: var(--mg-gold-dark);
+          border-color: var(--mg-gold-dark);
+        }
+
+        .mg-button:disabled {
+          background: color-mix(in srgb, var(--mg-muted) 55%, white);
+          border-color: color-mix(in srgb, var(--mg-muted) 55%, white);
+          color: color-mix(in srgb, var(--mg-text) 48%, transparent);
+          cursor: not-allowed;
+        }
+
+        .mg-button-secondary {
+          background: transparent;
+          color: var(--mg-text);
+        }
+
+        .mg-button-secondary:hover {
+          color: white;
+        }
+
+        .mg-hero-art {
+          position: relative;
+          min-height: 520px;
+          background:
+            linear-gradient(135deg, rgba(255,255,255,0.3), transparent),
+            radial-gradient(circle at 48% 35%, color-mix(in srgb, var(--mg-gold) 26%, transparent), transparent 16rem),
+            color-mix(in srgb, var(--mg-paper) 70%, var(--mg-soft));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .mg-hero-art::before {
+          content: "";
+          position: absolute;
+          inset: 54px;
+          border: 1px solid color-mix(in srgb, var(--mg-gold) 28%, transparent);
+          border-radius: 40px;
+          background:
+            linear-gradient(45deg, transparent 48%, color-mix(in srgb, var(--mg-gold) 12%, transparent) 49%, transparent 50%),
+            color-mix(in srgb, var(--mg-soft) 50%, transparent);
+        }
+
+        .mg-photo-stack {
+          position: relative;
+          width: min(78%, 430px);
+          height: 360px;
+        }
+
+        .mg-magnet {
+          position: absolute;
+          width: 190px;
+          height: 190px;
+          border-radius: 28px;
+          background:
+            linear-gradient(135deg, color-mix(in srgb, var(--mg-soft) 90%, white), var(--mg-paper));
+          border: 10px solid color-mix(in srgb, var(--mg-soft) 82%, white);
+          box-shadow: 0 28px 50px rgba(42, 33, 27, 0.18);
+          display: grid;
+          place-items: center;
+          text-align: center;
+          font-family: Georgia, "Times New Roman", serif;
+          color: var(--mg-text);
+          font-size: 1.55rem;
+        }
+
+        .mg-magnet-one {
+          left: 0;
+          top: 40px;
+          transform: rotate(-8deg);
+        }
+
+        .mg-magnet-two {
+          right: 18px;
+          top: 10px;
+          border-radius: 999px;
+          transform: rotate(8deg);
+        }
+
+        .mg-magnet-three {
+          left: 120px;
+          bottom: 4px;
+          transform: rotate(3deg);
+        }
+
+        .mg-trust-row {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          border-top: 1px solid color-mix(in srgb, var(--mg-muted) 35%, transparent);
+          border-bottom: 1px solid color-mix(in srgb, var(--mg-muted) 35%, transparent);
+          background: var(--mg-soft);
+        }
+
+        .mg-trust-row article {
+          padding: 24px;
+          border-right: 1px solid color-mix(in srgb, var(--mg-muted) 30%, transparent);
+        }
+
+        .mg-trust-row article:last-child {
+          border-right: 0;
+        }
+
+        .mg-trust-row strong,
+        .mg-trust-row span {
+          display: block;
+        }
+
+        .mg-trust-row strong {
+          text-transform: uppercase;
+          letter-spacing: 0.09em;
+          font-size: 0.78rem;
+        }
+
+        .mg-trust-row span {
+          margin-top: 8px;
+          color: color-mix(in srgb, var(--mg-text) 68%, transparent);
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+
+        .mg-section {
+          padding: clamp(46px, 7vw, 82px);
+        }
+
+        .mg-section-heading {
+          text-align: center;
+          max-width: 760px;
+          margin: 0 auto 34px;
+        }
+
+        .mg-section h2 {
+          font-size: clamp(2.3rem, 4vw, 4.2rem);
+          line-height: 1;
+          margin: 10px 0 14px;
+        }
+
+        .mg-section-heading p {
+          line-height: 1.7;
+          color: color-mix(in srgb, var(--mg-text) 72%, transparent);
+        }
+
+        .mg-custom {
+          background:
+            linear-gradient(180deg, var(--mg-soft), color-mix(in srgb, var(--mg-paper) 56%, var(--mg-soft)));
+        }
+
+        .mg-configurator {
+          display: grid;
+          grid-template-columns: 0.9fr 1.1fr;
+          gap: 24px;
+        }
+
+        .mg-config-panel,
+        .mg-preview-panel,
+        .mg-product-card,
+        .mg-life-card,
+        .mg-b2b-grid article,
+        .mg-faq details {
+          background: color-mix(in srgb, var(--mg-soft) 90%, white);
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 42%, transparent);
+          border-radius: 20px;
+          box-shadow: 0 18px 36px rgba(42, 33, 27, 0.07);
+        }
+
+        .mg-config-panel {
+          padding: 24px;
+        }
+
+        .mg-config-panel h3 {
+          margin: 22px 0 12px;
+          font-size: 1rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        .mg-chip-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .mg-chip {
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 60%, transparent);
+          background: var(--mg-soft);
+          color: var(--mg-text);
+          padding: 10px 12px;
+          border-radius: 999px;
+          cursor: pointer;
+        }
+
+        .mg-chip.is-active,
+        .mg-pack.is-active {
+          background: color-mix(in srgb, var(--mg-gold) 16%, var(--mg-soft));
+          border-color: var(--mg-gold);
+          box-shadow: 0 0 0 3px color-mix(in srgb, var(--mg-gold) 13%, transparent);
+        }
+
+        .mg-pack-list {
+          display: grid;
+          gap: 9px;
+        }
+
+        .mg-pack {
+          text-align: left;
+          padding: 14px;
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 55%, transparent);
+          background: var(--mg-soft);
+          color: var(--mg-text);
+          border-radius: 14px;
+          cursor: pointer;
+        }
+
+        .mg-pack span,
+        .mg-pack small {
+          display: block;
+        }
+
+        .mg-pack span {
+          font-weight: 800;
+        }
+
+        .mg-pack small {
+          margin-top: 4px;
+          color: color-mix(in srgb, var(--mg-text) 62%, transparent);
+        }
+
+        .mg-upload {
+          border: 2px dashed color-mix(in srgb, var(--mg-gold) 65%, transparent);
+          background: color-mix(in srgb, var(--mg-gold) 8%, var(--mg-soft));
+          border-radius: 18px;
+          padding: 22px;
+          display: grid;
+          gap: 8px;
+          cursor: pointer;
+          text-align: center;
+        }
+
+        .mg-upload input {
+          display: none;
+        }
+
+        .mg-upload span {
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        .mg-upload small {
+          color: color-mix(in srgb, var(--mg-text) 65%, transparent);
+        }
+
+        .mg-edit-controls {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+          margin: 18px 0;
+        }
+
+        .mg-edit-controls label {
+          display: grid;
+          gap: 8px;
+          font-size: 0.86rem;
+          font-weight: 700;
+        }
+
+        .mg-edit-controls input {
+          accent-color: var(--mg-gold);
+        }
+
+        .mg-checkbox {
+          display: flex;
+          gap: 10px;
+          margin-top: 12px;
+          line-height: 1.45;
+          font-size: 0.9rem;
+        }
+
+        .mg-checkbox input {
+          accent-color: var(--mg-gold);
+        }
+
+        .mg-cart-box {
+          margin-top: 22px;
+          padding: 18px;
+          background: color-mix(in srgb, var(--mg-paper) 60%, var(--mg-soft));
+          border-radius: 18px;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .mg-cart-box span,
+        .mg-cart-box strong {
+          display: block;
+        }
+
+        .mg-cart-box span {
+          color: color-mix(in srgb, var(--mg-text) 62%, transparent);
+        }
+
+        .mg-cart-box strong {
+          font-size: 1.5rem;
+          margin-top: 4px;
+        }
+
+        .mg-preview-panel {
+          padding: 24px;
+        }
+
+        .mg-preview-header {
+          display: flex;
+          justify-content: space-between;
+          gap: 16px;
+          align-items: end;
+          margin-bottom: 18px;
+        }
+
+        .mg-preview-header h3 {
+          margin: 0;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: 2rem;
+          font-weight: 400;
+        }
+
+        .mg-preview-header p {
+          margin: 0;
+          color: var(--mg-gold-dark);
+          font-weight: 700;
+        }
+
+        .mg-preview-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+        }
+
+        .mg-preview-slot {
+          position: relative;
+          aspect-ratio: 1 / 1;
+          border-radius: 20px;
+          background:
+            linear-gradient(135deg, color-mix(in srgb, var(--mg-paper) 65%, white), var(--mg-soft));
+          border: 8px solid color-mix(in srgb, var(--mg-soft) 82%, white);
+          overflow: hidden;
+          display: grid;
+          place-items: center;
+          color: color-mix(in srgb, var(--mg-text) 45%, transparent);
+          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mg-muted) 45%, transparent);
+        }
+
+        .mg-preview-slot.is-round {
+          border-radius: 999px;
+        }
+
+        .mg-preview-slot img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.2s ease;
+        }
+
+        .mg-preview-note {
+          color: color-mix(in srgb, var(--mg-text) 62%, transparent);
+          margin-top: 16px;
+        }
+
+        .mg-product-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+
+        .mg-product-card {
+          padding: 18px;
+        }
+
+        .mg-product-image {
+          height: 170px;
+          border-radius: 16px;
+          background:
+            radial-gradient(circle at 70% 28%, color-mix(in srgb, var(--mg-gold) 28%, transparent), transparent 9rem),
+            linear-gradient(135deg, var(--mg-paper), var(--mg-soft));
+          display: grid;
+          place-items: center;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: 1.8rem;
+          color: var(--mg-gold-dark);
+        }
+
+        .mg-product-card h3,
+        .mg-life-card h3,
+        .mg-b2b-grid h3 {
+          margin-bottom: 8px;
+        }
+
+        .mg-product-card p {
+          color: color-mix(in srgb, var(--mg-text) 68%, transparent);
+          line-height: 1.55;
+        }
+
+        .mg-product-card a {
+          color: var(--mg-gold-dark);
+          font-weight: 900;
+        }
+
+        .mg-soft-section {
+          background: color-mix(in srgb, var(--mg-paper) 62%, var(--mg-soft));
+        }
+
+        .mg-life-grid,
+        .mg-b2b-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 14px;
+        }
+
+        .mg-life-card,
+        .mg-b2b-grid article {
+          padding: 22px;
+          min-height: 130px;
+        }
+
+        .mg-life-card span,
+        .mg-b2b-grid span {
+          color: var(--mg-gold-dark);
+          font-size: 1.5rem;
+        }
+
+        .mg-how {
+          background: var(--mg-soft);
+        }
+
+        .mg-steps {
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 12px;
+        }
+
+        .mg-steps article {
+          background: color-mix(in srgb, var(--mg-paper) 55%, var(--mg-soft));
+          border-radius: 18px;
+          padding: 18px;
+          text-align: center;
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 38%, transparent);
+        }
+
+        .mg-steps strong {
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          margin: 0 auto 14px;
+          display: grid;
+          place-items: center;
+          background: var(--mg-gold);
+          color: white;
+        }
+
+        .mg-steps span {
+          font-weight: 800;
+        }
+
+        .mg-packaging {
+          display: grid;
+          grid-template-columns: 0.9fr 1.1fr;
+          gap: 28px;
+          align-items: center;
+          background:
+            linear-gradient(135deg, color-mix(in srgb, var(--mg-accent) 26%, var(--mg-paper)), var(--mg-soft));
+        }
+
+        .mg-packaging p {
+          line-height: 1.75;
+          color: color-mix(in srgb, var(--mg-text) 72%, transparent);
+        }
+
+        .mg-packaging-list {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+
+        .mg-packaging-list span {
+          padding: 16px;
+          border-radius: 14px;
+          background: color-mix(in srgb, var(--mg-soft) 78%, white);
+          border: 1px solid color-mix(in srgb, var(--mg-muted) 35%, transparent);
+          font-weight: 800;
+        }
+
+        .mg-b2b {
+          background: var(--mg-bg);
+        }
+
+        .mg-center {
+          display: flex;
+          justify-content: center;
+          margin-top: 28px;
+        }
+
+        .mg-story {
+          background: var(--mg-footer);
+          color: var(--mg-soft);
+          display: grid;
+          grid-template-columns: 0.8fr 1.2fr;
+          gap: 26px;
+          align-items: center;
+        }
+
+        .mg-story .mg-eyebrow {
+          color: var(--mg-gold);
+        }
+
+        .mg-story p {
+          line-height: 1.85;
+          color: color-mix(in srgb, var(--mg-soft) 82%, transparent);
+        }
+
+        .mg-faq {
+          background: var(--mg-soft);
+        }
+
+        .mg-faq-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+
+        .mg-faq details {
+          padding: 18px;
+        }
+
+        .mg-faq summary {
+          cursor: pointer;
+          font-weight: 900;
+        }
+
+        .mg-faq p {
+          color: color-mix(in srgb, var(--mg-text) 68%, transparent);
+          line-height: 1.55;
+        }
+
+        .mg-footer {
+          background: var(--mg-footer);
+          color: var(--mg-soft);
+          display: grid;
+          grid-template-columns: 1.2fr 0.7fr 0.7fr 1.1fr;
+          gap: 28px;
+          padding: 42px;
+        }
+
+        .mg-footer h2,
+        .mg-footer h3 {
+          margin-top: 0;
+        }
+
+        .mg-footer h2 {
+          font-family: Georgia, "Times New Roman", serif;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-weight: 400;
+        }
+
+        .mg-footer a {
+          display: block;
+          color: color-mix(in srgb, var(--mg-soft) 74%, transparent);
+          margin: 9px 0;
+          font-size: 0.92rem;
+        }
+
+        .mg-footer p {
+          color: color-mix(in srgb, var(--mg-soft) 74%, transparent);
+          line-height: 1.65;
+        }
+
+        .mg-subscribe {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 8px;
+        }
+
+        .mg-subscribe input {
+          min-height: 44px;
+          border-radius: 8px;
+          border: 1px solid color-mix(in srgb, var(--mg-soft) 35%, transparent);
+          padding: 0 14px;
+        }
+
+        .mg-subscribe button {
+          border: 0;
+          border-radius: 8px;
+          background: var(--mg-gold);
+          color: white;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          padding: 0 16px;
+        }
+
+        @media (max-width: 980px) {
+          .mg-page {
+            padding: 14px;
+          }
+
+          .mg-theme-panel,
+          .mg-hero,
+          .mg-configurator,
+          .mg-packaging,
+          .mg-story,
+          .mg-footer {
+            grid-template-columns: 1fr;
+          }
+
+          .mg-theme-grid,
+          .mg-product-grid,
+          .mg-life-grid,
+          .mg-b2b-grid,
+          .mg-faq-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .mg-trust-row {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .mg-steps {
+            grid-template-columns: repeat(3, 1fr);
+          }
+
+          .mg-header {
+            grid-template-columns: 1fr auto;
+          }
+
+          .mg-nav {
+            grid-column: 1 / -1;
+            flex-wrap: wrap;
+          }
+        }
+
+        @media (max-width: 620px) {
+          .mg-theme-grid,
+          .mg-product-grid,
+          .mg-life-grid,
+          .mg-b2b-grid,
+          .mg-faq-grid,
+          .mg-trust-row,
+          .mg-steps,
+          .mg-preview-grid,
+          .mg-packaging-list {
+            grid-template-columns: 1fr;
+          }
+
+          .mg-header {
+            padding: 18px;
+          }
+
+          .mg-section,
+          .mg-hero-copy {
+            padding: 34px 20px;
+          }
+
+          .mg-hero-art {
+            min-height: 380px;
+          }
+
+          .mg-photo-stack {
+            transform: scale(0.82);
+          }
+
+          .mg-cart-box {
+            grid-template-columns: 1fr;
+          }
+
+          .mg-preview-header {
+            display: block;
+          }
+        }
+      `}</style>
+    </main>
+  );
+}

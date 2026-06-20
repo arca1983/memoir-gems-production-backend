@@ -1,0 +1,24 @@
+{
+  "name": "memoir-gems-test-portal-v28-production-backend",
+  "version": "2.8.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "latest",
+    "@uploadthing/react": "^7.3.3",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "uploadthing": "^7.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}

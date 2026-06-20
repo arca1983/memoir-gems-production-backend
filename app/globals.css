@@ -1,0 +1,2139 @@
+
+:root {
+  --navy: #10233F;
+  --gold: #C8A45D;
+  --ivory: #F7F1E8;
+  --ink: #262626;
+  --green-bg: #dcfce7;
+  --green-text: #166534;
+  --yellow-bg: #fef9c3;
+  --yellow-text: #854d0e;
+  --red-bg: #fee2e2;
+  --red-text: #991b1b;
+  --blue-bg: #dbeafe;
+  --blue-text: #1e40af;
+  --gray-bg: #f1f5f9;
+  --gray-text: #475569;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.container { max-width: 1120px; margin: 0 auto; padding: 28px 18px 56px; }
+.hero {
+  background: linear-gradient(135deg, #10233F, #1c3459);
+  color: white;
+  border-radius: 22px;
+  padding: 32px;
+  box-shadow: 0 12px 34px rgba(16, 35, 63, 0.22);
+  margin-bottom: 22px;
+}
+.hero h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 44px); letter-spacing: -0.03em; }
+.hero p { margin: 0; color: #efe7d9; max-width: 780px; line-height: 1.55; }
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 22px rgba(0,0,0,0.04);
+}
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+label { display: block; font-weight: 700; font-size: 13px; color: #374151; margin-bottom: 6px; }
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 11px 12px;
+  font: inherit;
+  background: #fff;
+}
+textarea { min-height: 80px; resize: vertical; }
+button, .button {
+  border: 0;
+  border-radius: 12px;
+  background: var(--navy);
+  color: white;
+  padding: 12px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+button.secondary, .button.secondary { background: var(--gold); color: var(--navy); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.status { border-radius: 14px; padding: 14px; font-weight: 800; margin: 12px 0; }
+.status.yellow { background: var(--yellow-bg); color: var(--yellow-text); border: 1px solid #fde047; }
+.status.green { background: var(--green-bg); color: var(--green-text); border: 1px solid #86efac; }
+.status.red { background: var(--red-bg); color: var(--red-text); border: 1px solid #fca5a5; }
+.small { font-size: 13px; color: #6b7280; line-height: 1.45; }
+.photo-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.photo-card { border: 1px solid #e5e7eb; background: #fafafa; border-radius: 14px; padding: 8px; }
+.photo-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 10px; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th, .table td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 10px 8px; vertical-align: top; }
+.badge { border-radius: 999px; padding: 4px 9px; font-weight: 800; font-size: 12px; display: inline-block; }
+.badge.yellow { background: var(--yellow-bg); color: var(--yellow-text); }
+.badge.green { background: var(--green-bg); color: var(--green-text); }
+.badge.red { background: var(--red-bg); color: var(--red-text); }
+.badge.blue { background: var(--blue-bg); color: var(--blue-text); }
+.badge.gray { background: var(--gray-bg); color: var(--gray-text); }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .photo-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { padding: 24px; }
+}
+
+.navbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.stat-card b {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.pill.rush { background: #fee2e2; color: #991b1b; }
+.pill.standard { background: #e0f2fe; color: #075985; }
+.pill.event_deadline { background: #fef9c3; color: #854d0e; }
+
+.production-toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.sheet-preview {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+  page-break-after: always;
+}
+
+.sheet-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 800;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.magnet-slot {
+  border: 1px solid #111827;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f9fafb;
+  position: relative;
+}
+
+.magnet-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slot-label {
+  font-size: 11px;
+  margin-top: 4px;
+  color: #374151;
+  line-height: 1.25;
+}
+
+.slot-wrap { break-inside: avoid; }
+
+.map-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  background: #fafafa;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-row input { width: auto; }
+
+.address-review {
+  background: #f8fafc;
+  border: 1px dashed #94a3b8;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+@media print {
+  body { background: white; }
+  .no-print { display: none !important; }
+  .container { max-width: none; padding: 0; }
+  .sheet-preview {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0.25in;
+    page-break-after: always;
+  }
+  .slot-grid { gap: 0.15in; }
+  .magnet-slot { border: none; }
+  .slot-label { display: none; }
+}
+
+@media (max-width: 900px) {
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .stat-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ===========================
+   Memoir Gems V1.1 Real 2x2 Print System
+   =========================== */
+
+.print-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.print-only {
+  display: none;
+}
+
+.production-sheet-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: white;
+  padding: 0.5in 1.05in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.production-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2in);
+  grid-template-rows: repeat(4, 2in);
+  gap: 0.15in;
+  justify-content: center;
+  align-content: start;
+}
+
+.production-photo-slot {
+  width: 2in;
+  height: 2in;
+  position: relative;
+  overflow: hidden;
+  background: white;
+  border: 0.25pt solid #d1d5db;
+}
+
+.production-photo-slot img {
+  width: 2in;
+  height: 2in;
+  object-fit: cover;
+  display: block;
+}
+
+.cut-mark {
+  position: absolute;
+  background: #111827;
+  opacity: 0.55;
+}
+
+.cut-mark.tl-h, .cut-mark.tr-h, .cut-mark.bl-h, .cut-mark.br-h {
+  width: 0.08in;
+  height: 0.005in;
+}
+
+.cut-mark.tl-v, .cut-mark.tr-v, .cut-mark.bl-v, .cut-mark.br-v {
+  width: 0.005in;
+  height: 0.08in;
+}
+
+.cut-mark.tl-h { left: 0; top: 0; }
+.cut-mark.tl-v { left: 0; top: 0; }
+.cut-mark.tr-h { right: 0; top: 0; }
+.cut-mark.tr-v { right: 0; top: 0; }
+.cut-mark.bl-h { left: 0; bottom: 0; }
+.cut-mark.bl-v { left: 0; bottom: 0; }
+.cut-mark.br-h { right: 0; bottom: 0; }
+.cut-mark.br-v { right: 0; bottom: 0; }
+
+.production-map-page {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+  page-break-after: always;
+}
+
+.production-map-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.print-warning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  margin: 12px 0;
+}
+
+@page {
+  size: Letter;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .no-print,
+  .hero,
+  .navbar,
+  .card,
+  .production-toolbar,
+  .print-controls,
+  .sheet-preview,
+  .map-card {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .container, main, .template-backend-page {
+    width: 8.5in !important;
+    max-width: 8.5in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .production-sheet-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    min-height: 11in !important;
+    padding: 0.5in 1.05in !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .production-sheet-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2in) !important;
+    grid-template-rows: repeat(4, 2in) !important;
+    gap: 0.15in !important;
+    justify-content: center !important;
+    align-content: start !important;
+  }
+
+  .production-photo-slot,
+  .production-photo-slot img {
+    width: 2in !important;
+    height: 2in !important;
+  }
+
+  .production-map-page {
+    width: 8.5in !important;
+    min-height: 11in !important;
+    margin: 0 !important;
+    padding: 0.45in !important;
+    border: none !important;
+    border-radius: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .production-map-page .table {
+    font-size: 10pt !important;
+  }
+
+  .production-map-page .table th,
+  .production-map-page .table td {
+    padding: 5px 4px !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.2 Operator Proof Sheet
+   =========================== */
+
+.operator-proof-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: white;
+  padding: 0.35in 0.45in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.operator-proof-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.operator-proof-header h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.operator-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2.35in);
+  grid-template-rows: repeat(4, 2.35in);
+  gap: 0.10in;
+  justify-content: center;
+}
+
+.operator-proof-slot {
+  width: 2.35in;
+  height: 2.35in;
+  border: 1px solid #111827;
+  position: relative;
+  background: white;
+  overflow: hidden;
+}
+
+.operator-proof-slot img {
+  width: 2.35in;
+  height: 2.35in;
+  object-fit: cover;
+  display: block;
+}
+
+.operator-proof-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: rgba(255,255,255,0.92);
+  color: #111827;
+  border-bottom: 1px solid #111827;
+  font-size: 9px;
+  line-height: 1.15;
+  padding: 3px 4px;
+  font-weight: 800;
+}
+
+.operator-proof-watermark {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  background: rgba(255,255,255,0.86);
+  color: #111827;
+  border: 1px solid #111827;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 5px;
+}
+
+.screen-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.screen-proof-card {
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.screen-proof-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.screen-proof-card .proof-info {
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #f8fafc;
+}
+
+@media print {
+  .operator-proof-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    min-height: 11in !important;
+    padding: 0.35in 0.45in !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .operator-proof-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2.35in) !important;
+    grid-template-rows: repeat(4, 2.35in) !important;
+    gap: 0.10in !important;
+    justify-content: center !important;
+  }
+
+  .operator-proof-slot,
+  .operator-proof-slot img {
+    width: 2.35in !important;
+    height: 2.35in !important;
+  }
+
+  .operator-proof-label {
+    font-size: 8.5px !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.3 Calibration Sheet
+   Same physical engine as Production Sheet
+   =========================== */
+
+.calibration-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: white;
+  padding: 0.5in 1.05in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.calibration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2in);
+  grid-template-rows: repeat(4, 2in);
+  gap: 0.15in;
+  justify-content: center;
+  align-content: start;
+}
+
+.calibration-slot {
+  width: 2in;
+  height: 2in;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(to right, rgba(15, 23, 42, 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.10) 1px, transparent 1px),
+    white;
+  background-size: 0.5in 0.5in;
+  border: 1pt solid #111827;
+}
+
+.calibration-slot-inner {
+  position: absolute;
+  inset: 0.125in;
+  border: 0.5pt dashed #64748b;
+}
+
+.calibration-slot-center-v,
+.calibration-slot-center-h {
+  position: absolute;
+  background: rgba(239, 68, 68, 0.75);
+}
+
+.calibration-slot-center-v {
+  width: 0.01in;
+  height: 100%;
+  top: 0;
+  left: calc(50% - 0.005in);
+}
+
+.calibration-slot-center-h {
+  height: 0.01in;
+  width: 100%;
+  left: 0;
+  top: calc(50% - 0.005in);
+}
+
+.calibration-label {
+  position: absolute;
+  left: 0.06in;
+  top: 0.06in;
+  right: 0.06in;
+  background: rgba(255,255,255,0.88);
+  border: 0.5pt solid #111827;
+  padding: 0.03in;
+  font-size: 8.5pt;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.calibration-slot-number {
+  position: absolute;
+  right: 0.06in;
+  bottom: 0.06in;
+  background: #111827;
+  color: white;
+  border-radius: 999px;
+  padding: 0.03in 0.07in;
+  font-size: 9pt;
+  font-weight: 900;
+}
+
+.calibration-ruler {
+  width: 1in;
+  height: 0.12in;
+  border: 1pt solid #111827;
+  margin: 0.12in auto 0;
+  position: relative;
+}
+
+.calibration-ruler::before {
+  content: "1 inch check";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0.15in;
+  text-align: center;
+  font-size: 8pt;
+  font-weight: 800;
+}
+
+.calibration-info {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  padding: 14px;
+  border-radius: 14px;
+  margin: 14px 0;
+  line-height: 1.45;
+}
+
+@media print {
+  .calibration-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    min-height: 11in !important;
+    padding: 0.5in 1.05in !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .calibration-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2in) !important;
+    grid-template-rows: repeat(4, 2in) !important;
+    gap: 0.15in !important;
+    justify-content: center !important;
+    align-content: start !important;
+  }
+
+  .calibration-slot {
+    width: 2in !important;
+    height: 2in !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .calibration-label {
+    font-size: 8pt !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.4 JPG Template Backend Engine
+   Uses uploaded 1545x2000 template mapped to Letter 8.5x11
+   =========================== */
+
+.template-backend-page {
+  width: 8.5in;
+  height: 11in;
+  position: relative;
+  background: white;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.template-bg {
+  position: absolute;
+  inset: 0;
+  width: 8.5in;
+  height: 11in;
+  object-fit: fill;
+  z-index: 1;
+}
+
+.template-photo {
+  position: absolute;
+  width: 1.98in;
+  height: 1.98in;
+  object-fit: cover;
+  z-index: 2;
+  border: 0.5pt solid #111827;
+  background: white;
+}
+
+.template-proof-label {
+  position: absolute;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.92);
+  border: 0.75pt solid #111827;
+  color: #111827;
+  font-size: 7.5pt;
+  font-weight: 900;
+  line-height: 1.12;
+  padding: 0.035in;
+  width: 1.88in;
+  min-height: 0.28in;
+}
+
+.template-proof-slot-badge {
+  position: absolute;
+  z-index: 4;
+  background: #111827;
+  color: white;
+  border-radius: 999px;
+  font-size: 8pt;
+  font-weight: 900;
+  padding: 0.025in 0.06in;
+}
+
+.template-screen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.template-screen-card {
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: white;
+  overflow: hidden;
+}
+
+.template-screen-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.template-screen-card div {
+  padding: 8px;
+  background: #f8fafc;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.template-mode-banner {
+  border-radius: 14px;
+  padding: 14px;
+  background: #eef2ff;
+  color: #312e81;
+  border: 1px solid #c7d2fe;
+  font-weight: 800;
+  margin: 12px 0;
+}
+
+@media print {
+  .template-backend-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .template-bg {
+    width: 8.5in !important;
+    height: 11in !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .template-photo {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .template-proof-label {
+    font-size: 7.3pt !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.5 Template Backend Correction
+   Labels moved OUTSIDE customer photo area.
+   Print buttons are separated by purpose.
+   =========================== */
+
+.template-page-id {
+  position: absolute;
+  z-index: 5;
+  left: 0.12in;
+  top: 0.06in;
+  background: rgba(255,255,255,0.96);
+  color: #111827;
+  border: 0.75pt solid #111827;
+  border-radius: 6px;
+  padding: 0.035in 0.055in;
+  font-size: 7.2pt;
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.template-photo {
+  border: none !important;
+}
+
+/* Proof labels must live in template text zones, not over the photo. */
+.template-proof-label {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 0.65pt solid #111827 !important;
+  color: #111827 !important;
+  font-size: 6.6pt !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  padding: 0.025in 0.035in !important;
+  min-height: 0 !important;
+  height: 0.30in !important;
+  overflow: hidden !important;
+}
+
+.template-proof-slot-badge {
+  background: #111827 !important;
+  color: white !important;
+  border: 0.5pt solid white !important;
+}
+
+.control-pack-note {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #86efac;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: 800;
+  margin: 12px 0;
+}
+
+.print-button-final {
+  background: #10233F !important;
+}
+
+.print-button-control {
+  background: #C8A45D !important;
+  color: #10233F !important;
+}
+
+.print-button-complete {
+  background: #166534 !important;
+}
+
+.template-print-section-title {
+  font-weight: 900;
+  margin: 12px 0 6px;
+}
+
+
+/* ===========================
+   Memoir Gems V1.6 Production Job Print System
+   =========================== */
+
+.job-section-divider {
+  width: 8.5in;
+  height: 11in;
+  background: white;
+  color: #10233F;
+  padding: 0.75in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.job-section-divider h1 {
+  font-size: 34pt;
+  line-height: 1.05;
+  margin: 0 0 0.25in;
+}
+
+.job-section-divider h2 {
+  font-size: 20pt;
+  margin: 0 0 0.25in;
+  color: #8a5a00;
+}
+
+.job-section-divider p {
+  font-size: 14pt;
+  line-height: 1.45;
+  margin: 0.08in 0;
+}
+
+.job-section-divider .big-warning {
+  border: 2pt solid #10233F;
+  border-radius: 12px;
+  padding: 0.25in;
+  margin-top: 0.35in;
+  font-size: 16pt;
+  font-weight: 900;
+}
+
+.template-page-id.final-hidden {
+  display: none !important;
+}
+
+.production-job-button {
+  background: #166534 !important;
+  color: white !important;
+  font-size: 18px !important;
+  padding: 18px 26px !important;
+}
+
+.advanced-print-options {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
+.advanced-print-options summary {
+  cursor: pointer;
+  font-weight: 900;
+  color: #334155;
+}
+
+@media print {
+  .job-section-divider {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    padding: 0.75in !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.7 One Sheet QA Backend
+   =========================== */
+
+.qa-job-button {
+  background: #7c2d12 !important;
+  color: white !important;
+  font-size: 18px !important;
+  padding: 18px 26px !important;
+}
+
+.qa-panel {
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fdba74;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.qa-panel b {
+  color: #7c2d12;
+}
+
+
+/* ===========================
+   Memoir Gems V1.8 Correct Operator Proof
+   Proof no longer uses production template.
+   =========================== */
+
+.operator-contact-page {
+  width: 8.5in;
+  height: 11in;
+  background: white;
+  color: #111827;
+  padding: 0.35in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.operator-contact-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 2px solid #111827;
+  padding-bottom: 0.12in;
+  margin-bottom: 0.16in;
+}
+
+.operator-contact-header h1 {
+  margin: 0;
+  font-size: 18pt;
+  line-height: 1.05;
+}
+
+.operator-contact-header p {
+  margin: 0.04in 0 0;
+  font-size: 9pt;
+  font-weight: 700;
+}
+
+.operator-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2.45in);
+  grid-template-rows: repeat(4, 2.35in);
+  gap: 0.12in;
+  justify-content: center;
+}
+
+.operator-contact-card {
+  border: 1.2pt solid #111827;
+  background: white;
+  display: grid;
+  grid-template-rows: 0.34in 1.55in 0.38in;
+  overflow: hidden;
+}
+
+.operator-contact-top {
+  background: #111827;
+  color: white;
+  font-size: 8.5pt;
+  line-height: 1.05;
+  padding: 0.04in 0.06in;
+  font-weight: 900;
+}
+
+.operator-contact-card img {
+  width: 100%;
+  height: 1.55in;
+  object-fit: cover;
+  display: block;
+}
+
+.operator-contact-bottom {
+  background: #f8fafc;
+  border-top: 1px solid #cbd5e1;
+  font-size: 8pt;
+  line-height: 1.1;
+  padding: 0.04in 0.06in;
+  font-weight: 800;
+  color: #111827;
+}
+
+.operator-contact-slot {
+  float: right;
+  background: #facc15;
+  color: #111827;
+  border-radius: 999px;
+  padding: 0.01in 0.05in;
+  font-size: 8pt;
+  font-weight: 900;
+}
+
+.final-product-clean-note {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: 900;
+  margin: 12px 0;
+}
+
+@media print {
+  .operator-contact-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    padding: 0.35in !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .operator-contact-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2.45in) !important;
+    grid-template-rows: repeat(4, 2.35in) !important;
+    gap: 0.12in !important;
+    justify-content: center !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V1.9 Controlled One-Button Backend QA
+   =========================== */
+
+.one-button-panel {
+  background: #eef2ff;
+  color: #1e1b4b;
+  border: 1px solid #c7d2fe;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 14px 0;
+}
+
+.one-button-panel h2 {
+  margin-top: 0;
+}
+
+.one-button-primary {
+  background: #166534 !important;
+  color: white !important;
+  font-size: 18px !important;
+  padding: 18px 28px !important;
+  border-radius: 14px !important;
+}
+
+.clean-warning {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 900;
+  margin: 12px 0;
+}
+
+
+/* ===========================
+   Memoir Gems V2.0 Photo Print + Order Code Test
+   =========================== */
+
+.print-test-panel {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 14px 0;
+}
+
+.print-test-primary {
+  background: #10233F !important;
+  color: white !important;
+  font-size: 18px !important;
+  padding: 18px 28px !important;
+  border-radius: 14px !important;
+}
+
+.print-test-photo {
+  background: #166534 !important;
+  color: white !important;
+}
+
+.print-test-control {
+  background: #C8A45D !important;
+  color: #10233F !important;
+}
+
+.print-test-warning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  font-weight: 900;
+}
+
+.order-code-page {
+  width: 8.5in;
+  height: 11in;
+  background: white;
+  color: #111827;
+  padding: 0.45in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.order-code-header {
+  border-bottom: 2pt solid #111827;
+  padding-bottom: 0.12in;
+  margin-bottom: 0.18in;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.order-code-header h1 {
+  font-size: 20pt;
+  margin: 0;
+}
+
+.order-code-header p {
+  margin: 0.04in 0 0;
+  font-size: 10pt;
+  font-weight: 800;
+}
+
+.order-code-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.08in;
+  margin-bottom: 0.16in;
+}
+
+.order-code-summary-card {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  padding: 0.08in;
+  font-size: 8.4pt;
+  font-weight: 800;
+  min-height: 0.45in;
+}
+
+.order-code-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2.42in);
+  grid-template-rows: repeat(4, 1.45in);
+  gap: 0.10in;
+  justify-content: center;
+}
+
+.order-code-card {
+  border: 1.2pt solid #111827;
+  background: white;
+  padding: 0.07in;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 0.72in 1fr;
+  gap: 0.06in;
+}
+
+.order-code-thumb {
+  width: 0.72in;
+  height: 0.72in;
+  object-fit: cover;
+  border: 1px solid #cbd5e1;
+}
+
+.order-code-info {
+  font-size: 7.6pt;
+  line-height: 1.08;
+  font-weight: 800;
+}
+
+.order-code-slot {
+  display: inline-block;
+  background: #111827;
+  color: white;
+  border-radius: 999px;
+  padding: 0.01in 0.06in;
+  font-size: 8pt;
+  margin-bottom: 0.025in;
+}
+
+.order-code-code {
+  color: #7c2d12;
+  font-weight: 900;
+}
+
+.production-print-clean {
+  /* final product has no metadata overlays */
+}
+
+@media print {
+  .order-code-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    padding: 0.45in !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .order-code-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2.42in) !important;
+    grid-template-rows: repeat(4, 1.45in) !important;
+    gap: 0.10in !important;
+    justify-content: center !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V2.1 Assembly Pack
+   =========================== */
+
+.assembly-map-page {
+  width: 8.5in;
+  height: 11in;
+  background: white;
+  color: #111827;
+  padding: 0.36in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.assembly-map-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 2pt solid #111827;
+  padding-bottom: 0.12in;
+  margin-bottom: 0.16in;
+}
+
+.assembly-map-header h1 {
+  font-size: 20pt;
+  margin: 0;
+  line-height: 1.05;
+}
+
+.assembly-map-header p {
+  font-size: 9pt;
+  margin: 0.04in 0 0;
+  font-weight: 800;
+}
+
+.assembly-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2.48in);
+  grid-template-rows: repeat(4, 2.23in);
+  gap: 0.09in;
+  justify-content: center;
+}
+
+.assembly-slot-card {
+  border: 1.4pt solid #111827;
+  display: grid;
+  grid-template-rows: 0.33in 1.34in 0.50in;
+  background: white;
+  overflow: hidden;
+}
+
+.assembly-slot-top {
+  background: #10233F;
+  color: white;
+  padding: 0.035in 0.06in;
+  font-size: 8.1pt;
+  line-height: 1.05;
+  font-weight: 900;
+}
+
+.assembly-slot-top .slot-badge {
+  float: right;
+  background: #C8A45D;
+  color: #10233F;
+  border-radius: 999px;
+  padding: 0.005in 0.05in;
+  font-weight: 900;
+}
+
+.assembly-slot-photo {
+  width: 100%;
+  height: 1.34in;
+  object-fit: cover;
+  display: block;
+}
+
+.assembly-slot-bottom {
+  background: #f8fafc;
+  border-top: 1px solid #cbd5e1;
+  padding: 0.04in 0.06in;
+  font-size: 7.4pt;
+  line-height: 1.08;
+  font-weight: 800;
+}
+
+.assembly-code {
+  color: #7c2d12;
+  font-weight: 950;
+}
+
+.print-flow-card {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 16px;
+  padding: 14px;
+  margin: 12px 0;
+  font-weight: 900;
+}
+
+.map-table-compact {
+  font-size: 9pt;
+}
+
+.map-table-compact th,
+.map-table-compact td {
+  white-space: nowrap;
+}
+
+@media print {
+  .assembly-map-page {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    padding: 0.36in !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .assembly-slot-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 2.48in) !important;
+    grid-template-rows: repeat(4, 2.23in) !important;
+    gap: 0.09in !important;
+    justify-content: center !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V2.2 Print Map Only Control Pack
+   =========================== */
+
+.memoir-map-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: white;
+  color: #111827;
+  padding: 0.42in;
+  margin: 0 auto 24px;
+  page-break-after: always;
+  box-shadow: 0 0 0 1px #e5e7eb;
+}
+
+.memoir-map-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 2pt solid #111827;
+  padding-bottom: 0.12in;
+  margin-bottom: 0.14in;
+}
+
+.memoir-map-header h1 {
+  font-size: 20pt;
+  margin: 0;
+  line-height: 1.05;
+}
+
+.memoir-map-header p {
+  font-size: 9pt;
+  margin: 0.04in 0 0;
+  font-weight: 800;
+}
+
+.memoir-map-warning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  border-radius: 10px;
+  padding: 0.08in;
+  margin: 0.10in 0;
+  font-size: 9pt;
+  font-weight: 900;
+}
+
+.memoir-map-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.08in;
+  margin: 0.12in 0 0.16in;
+}
+
+.memoir-map-summary-card {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  padding: 0.08in;
+  font-size: 8.2pt;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.memoir-map-code {
+  color: #7c2d12;
+  font-weight: 950;
+}
+
+.memoir-map-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.6pt;
+}
+
+.memoir-map-table th {
+  background: #10233F;
+  color: white;
+  border: 1px solid #10233F;
+  padding: 0.045in;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.memoir-map-table td {
+  border: 1px solid #cbd5e1;
+  padding: 0.04in;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.memoir-map-table tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.memoir-map-thumb {
+  width: 0.42in;
+  height: 0.42in;
+  object-fit: cover;
+  border: 1px solid #cbd5e1;
+  display: block;
+}
+
+.memoir-map-slot {
+  font-weight: 950;
+  color: #10233F;
+}
+
+.memoir-map-footer-note {
+  margin-top: 0.12in;
+  font-size: 8.5pt;
+  font-weight: 800;
+  color: #334155;
+}
+
+@media print {
+  .memoir-map-page {
+    width: 8.5in !important;
+    min-height: 11in !important;
+    margin: 0 !important;
+    padding: 0.42in !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V2.3 Screen Assembly Mode
+   No map/proof printing. Only photo sheet prints.
+   =========================== */
+
+.screen-assembly-panel {
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 14px 0;
+}
+
+.screen-assembly-warning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  font-weight: 900;
+}
+
+.screen-mode-button {
+  background: #C8A45D !important;
+  color: #10233F !important;
+}
+
+.print-photo-button {
+  background: #166534 !important;
+  color: white !important;
+}
+
+.assembly-screen-page {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.assembly-screen-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 2px solid #10233F;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.assembly-screen-header h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.assembly-screen-header p {
+  margin: 4px 0;
+  font-weight: 800;
+}
+
+.assembly-screen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.assembly-screen-card {
+  border: 2px solid #10233F;
+  border-radius: 16px;
+  background: white;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 180px auto;
+}
+
+.assembly-screen-top {
+  background: #10233F;
+  color: white;
+  padding: 10px 12px;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.assembly-screen-top .screen-slot {
+  float: right;
+  background: #C8A45D;
+  color: #10233F;
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+.assembly-screen-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.assembly-screen-bottom {
+  padding: 10px 12px;
+  background: #f8fafc;
+  font-weight: 800;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.assembly-screen-code {
+  color: #7c2d12;
+  font-weight: 950;
+}
+
+.assembly-instructions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.assembly-bin {
+  background: white;
+  border: 2px solid #C8A45D;
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 900;
+}
+
+.assembly-bin span {
+  color: #7c2d12;
+}
+
+@media print {
+  .screen-only,
+  .assembly-screen-page,
+  .screen-assembly-panel,
+  .screen-assembly-warning,
+  .assembly-instructions {
+    display: none !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V2.4 Photo Sheet With Thin Order Guides
+   =========================== */
+
+.order-guide-label {
+  position: absolute;
+  z-index: 6;
+  background: rgba(255,255,255,0.96);
+  border: 0.45pt solid currentColor;
+  border-radius: 5px;
+  padding: 0.018in 0.045in;
+  font-size: 6.7pt;
+  line-height: 1.08;
+  font-weight: 950;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.order-guide-line {
+  position: absolute;
+  z-index: 5;
+  border: 0.55pt solid currentColor;
+  border-radius: 8px;
+  pointer-events: none;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.order-guide-slot-dot {
+  position: absolute;
+  z-index: 7;
+  background: rgba(255,255,255,0.96);
+  border: 0.45pt solid currentColor;
+  border-radius: 999px;
+  padding: 0.012in 0.035in;
+  font-size: 5.8pt;
+  font-weight: 950;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.order-guide-legend {
+  position: absolute;
+  z-index: 8;
+  left: 0.12in;
+  bottom: 0.07in;
+  background: rgba(255,255,255,0.96);
+  border: 0.5pt solid #334155;
+  border-radius: 6px;
+  padding: 0.035in 0.055in;
+  font-size: 6.8pt;
+  line-height: 1.22;
+  font-weight: 850;
+  color: #111827;
+  pointer-events: none;
+}
+
+.order-guide-batch {
+  position: absolute;
+  z-index: 8;
+  right: 0.12in;
+  bottom: 0.07in;
+  background: rgba(255,255,255,0.96);
+  border: 0.5pt solid #334155;
+  border-radius: 6px;
+  padding: 0.035in 0.055in;
+  font-size: 6.8pt;
+  line-height: 1.22;
+  font-weight: 900;
+  color: #111827;
+  pointer-events: none;
+}
+
+.guided-print-warning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: 900;
+  margin: 12px 0;
+}
+
+@media print {
+  .order-guide-label,
+  .order-guide-line,
+  .order-guide-slot-dot,
+  .order-guide-legend,
+  .order-guide-batch {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}
+
+
+/* ===========================
+   Memoir Gems V2.5 Cleaner Thin Order Guides
+   =========================== */
+
+.v25-guide-label {
+  position: absolute;
+  z-index: 6;
+  background: rgba(255,255,255,0.98);
+  border: 0.35pt solid currentColor;
+  border-radius: 4px;
+  padding: 0.014in 0.040in;
+  font-size: 6.1pt;
+  line-height: 1.05;
+  font-weight: 950;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.v25-guide-line {
+  position: absolute;
+  z-index: 5;
+  border: 0.35pt solid currentColor;
+  border-radius: 6px;
+  pointer-events: none;
+  box-sizing: border-box;
+  background: transparent;
+  opacity: 0.86;
+}
+
+.v25-guide-legend {
+  position: absolute;
+  z-index: 8;
+  left: 0.13in;
+  bottom: 0.06in;
+  background: rgba(255,255,255,0.98);
+  border: 0.35pt solid #334155;
+  border-radius: 5px;
+  padding: 0.028in 0.050in;
+  font-size: 6.1pt;
+  line-height: 1.15;
+  font-weight: 850;
+  color: #111827;
+  pointer-events: none;
+}
+
+.v25-guide-batch {
+  position: absolute;
+  z-index: 8;
+  right: 0.13in;
+  bottom: 0.06in;
+  background: rgba(255,255,255,0.98);
+  border: 0.35pt solid #334155;
+  border-radius: 5px;
+  padding: 0.028in 0.050in;
+  font-size: 6.1pt;
+  line-height: 1.15;
+  font-weight: 900;
+  color: #111827;
+  pointer-events: none;
+}
+
+.v25-preview-note {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #312e81;
+  border-radius: 14px;
+  padding: 14px;
+  font-weight: 850;
+  margin: 12px 0;
+}
+
+@media print {
+  .v25-guide-label,
+  .v25-guide-line,
+  .v25-guide-legend,
+  .v25-guide-batch {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+}
+
+
+/* Memoir Gems V2.6 — All 2x2 / 12-slot combinations */
+.combo-controls{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;margin:14px 0}
+.combo-select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #cbd5e1;font-weight:800;font-size:15px;background:white}
+.combo-help{background:#eef2ff;border:1px solid #c7d2fe;color:#312e81;border-radius:14px;padding:14px;font-weight:850;margin:12px 0}
+.combo-warning{background:#fff7ed;border:1px solid #fdba74;color:#9a3412;border-radius:14px;padding:14px;font-weight:900;margin:12px 0}
+.combo-grid-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.combo-preview-slot{border:1px solid #cbd5e1;border-radius:10px;background:white;padding:10px;font-weight:900;min-height:54px}
+.combo-preview-slot span{display:block;font-size:12px;opacity:.85}
+.v26-guide-line{position:absolute;z-index:5;border:.40pt solid currentColor;border-radius:7px;pointer-events:none;box-sizing:border-box;background:transparent;opacity:.86}
+.v26-guide-label{position:absolute;z-index:6;background:rgba(255,255,255,.98);border:.35pt solid currentColor;border-radius:4px;padding:.012in .036in;font-size:5.9pt;line-height:1.05;font-weight:950;white-space:nowrap;pointer-events:none}
+.v26-guide-legend{position:absolute;z-index:8;left:.13in;bottom:.06in;background:rgba(255,255,255,.98);border:.35pt solid #334155;border-radius:5px;padding:.028in .050in;font-size:5.9pt;line-height:1.15;font-weight:850;color:#111827;pointer-events:none}
+.v26-guide-batch{position:absolute;z-index:8;right:.13in;bottom:.06in;background:rgba(255,255,255,.98);border:.35pt solid #334155;border-radius:5px;padding:.028in .050in;font-size:5.9pt;line-height:1.15;font-weight:900;color:#111827;pointer-events:none}
+.v26-small-table{font-size:13px}.v26-small-table th,.v26-small-table td{white-space:nowrap}
+@media print{.v26-guide-line,.v26-guide-label,.v26-guide-legend,.v26-guide-batch{print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}}
+
+
+/* ===========================
+   Memoir Gems V2.7 — Correct Print Map + Clean Photo Sheet
+
+   Two clearly separated backend outputs:
+   A) Memoir Gems Print Map  — operator reference with gutter-zone group outlines
+   B) Photo Production Sheet — clean print file, zero overlays
+   =========================== */
+
+/* ── Photo: clean, no overlays ── */
+.v27-clean-photo {
+  border: none !important;
+  /* No label. No overlay. No code. Just the photo. */
+}
+
+/* ── Right-margin production map — all order info lives here, zero inside slots ── */
+/* Styles are inline in the component; no CSS classes needed for this panel. */
+
+/* ── Screen UI — print action panel ── */
+.v27-print-panel h2 {
+  margin-top: 0;
+}
+
+.v27-print-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.v27-btn-print {
+  background: #10233F !important;
+  color: white !important;
+  font-size: 16px !important;
+  padding: 16px 24px !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 2px !important;
+}
+
+.v27-btn-sub {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.v27-type-legend {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #374151;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.v27-type-legend b {
+  color: #111827;
+}
+
+@media (max-width: 700px) {
+  .v27-btn-print { font-size: 14px !important; padding: 13px 18px !important; }
+}
+
+/* ── Print rendering — ensure photos and right-margin panel print correctly ── */
+@media print {
+  .v27-clean-photo {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .v27-print-map {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+}
+
+/* ===========================
+   Memoir Gems V2.8 Production Backend
+   =========================== */
+
+.admin-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin: 0 0 18px;
+}
+
+.admin-header-row h1 {
+  margin: 0 0 6px;
+  color: #1C1713;
+  font-size: 34px;
+}
+
+.admin-header-row p {
+  margin: 0;
+  color: #6E5433;
+  font-weight: 700;
+}
+
+.admin-home-card {
+  display: block;
+  min-height: 150px;
+  text-decoration: none;
+  background: #F5F2EC;
+  border: 1px solid #D6C2A1;
+  border-radius: 8px;
+  padding: 22px;
+  color: #1C1713;
+}
+
+.admin-home-card b {
+  display: block;
+  color: #0A0A0A;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.admin-home-card span {
+  color: #6E5433;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.stacked-actions {
+  display: grid;
+  gap: 7px;
+  min-width: 168px;
+}
+
+.stacked-actions button,
+.stacked-actions .button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.admin-table {
+  min-width: 1080px;
+}
+
+.batch-sheet-card {
+  border: 1px solid #D6C2A1;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+  background: #F5F2EC;
+}
+
+.batch-sheet-card h3 {
+  margin: 0 0 12px;
+  color: #1C1713;
+}
+
+.batch-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.batch-slot-card {
+  min-height: 156px;
+  border: 2px solid #D6C2A1;
+  border-radius: 8px;
+  background: #F5F2EC;
+  padding: 8px;
+  display: grid;
+  gap: 5px;
+  color: #1C1713;
+}
+
+.batch-slot-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.batch-slot-card span,
+.batch-slot-card small {
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .admin-header-row {
+    display: block;
+  }
+
+  .batch-slot-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Memoir Gems Production Print Map — real template with photos, outlines, legend */
+.v27-print-map { /* single print output */ }
