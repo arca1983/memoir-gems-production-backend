@@ -129,6 +129,16 @@ export default function AdminDashboard() {
               <b>📋</b><span>Inventory</span>
             </div>
           </Link>
+          <Link href="/admin/pricing" style={{ textDecoration: "none" }}>
+            <div className="stat-card" style={{ cursor: "pointer" }}>
+              <b>💲</b><span>Pricing</span>
+            </div>
+          </Link>
+          <Link href="/admin/reports" style={{ textDecoration: "none" }}>
+            <div className="stat-card" style={{ cursor: "pointer" }}>
+              <b>📊</b><span>Reports</span>
+            </div>
+          </Link>
           <Link href="/admin/formats" style={{ textDecoration: "none" }}>
             <div className="stat-card" style={{ cursor: "pointer" }}>
               <b>📐</b><span>Formats</span>

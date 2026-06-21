@@ -115,6 +115,14 @@ export type OrderRow = {
   rush_reason?: string | null;
   notes?: string | null;
   production_notes?: string | null;
+  /** Selling price per piece, set from the Pricing Calculator. */
+  unit_price?: number | null;
+  /** Material+labor cost per piece, set from the Pricing Calculator. */
+  unit_cost?: number | null;
+  /** Total amount charged for this order (revenue) = unit_price x qty. */
+  total_price?: number | null;
+  /** Total material+labor cost for this order = unit_cost x qty. */
+  total_cost?: number | null;
   created_at: string;
 };
 
@@ -255,6 +263,12 @@ export function isInternational(order: OrderRow): boolean {
   return country !== "" && country !== "US" && country !== "USA" && country !== "UNITED STATES";
 }
 
+/** Profit for an order (revenue − cost). Null if either value is missing. */
+export function orderProfit(order: OrderRow): number | null {
+  if (order.total_price == null || order.total_cost == null) return null;
+  return order.total_price - order.total_cost;
+}
+
 /** Suggest a carrier based on priority and destination */
 export function carrierOf(order: OrderRow): string {
   if (isInternational(order)) return "USPS Priority International";
@@ -284,16 +298,16 @@ export function colorForIndex(i: number): string {
 }
 
 const SYMBOL_MAP: Record<string, string> = {
-  standard:       "\u25cf",
-  rush:           "\u26a1",
-  event:          "\u2605",
-  event_deadline: "\u2605",
-  b2b:            "\u25a0",
-  business:       "\u25a0",
+  standard:       "●",
+  rush:           "⚡",
+  event:          "★",
+  event_deadline: "★",
+  b2b:            "■",
+  business:       "■",
 };
 
 export function symbolForPriority(priority?: string | null): string {
-  return SYMBOL_MAP[(priority || "standard").toLowerCase()] || "\u25cf";
+  return SYMBOL_MAP[(priority || "standard").toLowerCase()] || "●";
 }
 
 /** Return true if a photo should be included in the print batch */

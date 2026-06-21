@@ -8,6 +8,7 @@ import {
   PhotoRow,
   PRODUCTION_STATUSES,
   PUBLIC_STATUSES,
+  orderProfit,
   postalCodeOf,
   publicStatusOf,
   stateOf,
@@ -20,6 +21,10 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
   const [saving, setSaving] = useState(false);
   const [tracking, setTracking] = useState("");
   const [productionNotes, setProductionNotes] = useState("");
+  const [unitPrice, setUnitPrice] = useState("");
+  const [unitCost, setUnitCost] = useState("");
+  const [totalPrice, setTotalPrice] = useState("");
+  const [totalCost, setTotalCost] = useState("");
 
   async function loadData() {
     const { data, error } = await supabase
@@ -37,6 +42,10 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
     setOrder(loadedOrder);
     setTracking(loadedOrder.tracking_number || "");
     setProductionNotes(loadedOrder.production_notes || "");
+    setUnitPrice(loadedOrder.unit_price != null ? String(loadedOrder.unit_price) : "");
+    setUnitCost(loadedOrder.unit_cost != null ? String(loadedOrder.unit_cost) : "");
+    setTotalPrice(loadedOrder.total_price != null ? String(loadedOrder.total_price) : "");
+    setTotalCost(loadedOrder.total_cost != null ? String(loadedOrder.total_cost) : "");
 
     const { data: photoData, error: photoError } = await supabase
       .from("order_photos")
@@ -154,6 +163,67 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
       </div>
 
       <div className="card">
+        <h2>Pricing</h2>
+        <p className="small">Edit Unit Price and Unit Cost — Total Price, Total Cost, and Profit calculate on their own.</p>
+        <div className="grid">
+          <div>
+            <label>Unit Price ($/piece) — gold</label>
+            <input
+              type="number"
+              step="0.01"
+              value={unitPrice}
+              onChange={(event) => {
+                setUnitPrice(event.target.value);
+                const qty = order.photo_count || 0;
+                if (event.target.value && qty) setTotalPrice((Number(event.target.value) * qty).toFixed(2));
+              }}
+            />
+          </div>
+          <div>
+            <label>Unit Cost ($/piece) — gold</label>
+            <input
+              type="number"
+              step="0.01"
+              value={unitCost}
+              onChange={(event) => {
+                setUnitCost(event.target.value);
+                const qty = order.photo_count || 0;
+                if (event.target.value && qty) setTotalCost((Number(event.target.value) * qty).toFixed(2));
+              }}
+            />
+          </div>
+          <div>
+            <label>Total Price ($) — revenue</label>
+            <input type="number" step="0.01" value={totalPrice} onChange={(event) => setTotalPrice(event.target.value)} />
+          </div>
+          <div>
+            <label>Total Cost ($)</label>
+            <input type="number" step="0.01" value={totalCost} onChange={(event) => setTotalCost(event.target.value)} />
+          </div>
+        </div>
+        <p className="small" style={{ marginTop: 8 }}>
+          {order.photo_count ? `${order.photo_count} pieces. ` : ""}
+          Profit: {orderProfit({ ...order, total_price: totalPrice ? Number(totalPrice) : null, total_cost: totalCost ? Number(totalCost) : null }) != null
+            ? `$${orderProfit({ ...order, total_price: totalPrice ? Number(totalPrice) : null, total_cost: totalCost ? Number(totalCost) : null })!.toFixed(2)}`
+            : "— (enter price and cost)"}
+        </p>
+        <div className="actions">
+          <button
+            disabled={saving}
+            onClick={() => updateOrder({
+              unit_price: unitPrice ? Number(unitPrice) : null,
+              unit_cost: unitCost ? Number(unitCost) : null,
+              total_price: totalPrice ? Number(totalPrice) : null,
+              total_cost: totalCost ? Number(totalCost) : null,
+            }, "Pricing updated")}
+          >
+            Save Pricing
+          </button>
+          <Link className="button secondary" href="/admin/pricing">Open Pricing Calculator ↗</Link>
+        </div>
+      </div>
+
+      <div className="card">
         <h2>Production Notes</h2>
         <textarea value={productionNotes} onChange={(event) => setProductionNotes(event.target.value)} />
         <div className="actions">
@@ -182,4 +252,3 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
     </>
   );
 }
-
