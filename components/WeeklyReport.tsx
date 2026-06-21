@@ -30,6 +30,8 @@ type BatchLine = {
   created_at: string;
 };
 
+const SHEETS_PER_REAM = 500;
+
 function statusOf(onHand: number, threshold: number) {
   if (onHand <= 0) return { badge: "badge red", label: "Out of Stock" };
   if (onHand < threshold) return { badge: "badge red", label: "Low Stock" };
@@ -66,12 +68,31 @@ export default function WeeklyReport() {
       .order("created_at", { ascending: false });
     setBatches((batchData || []) as BatchLine[]);
 
+    // All-time sheets used, to match the same "reams remaining" math as
+    // /admin/inventory (paper is one shared pool consumed across every batch
+    // ever printed, not just this week's batches).
+    const { data: allBatchSheets } = await supabase
+      .from("production_batches")
+      .select("total_sheets, photo_paper_needed");
+    const sheetsUsedAllTime = (allBatchSheets || []).reduce(
+      (sum, b) => sum + ((b as BatchLine).photo_paper_needed || (b as BatchLine).total_sheets || 0),
+      0
+    );
+
     const { data: materialData } = await supabase
       .from("material_inventory")
-      .select("material_label, quantity_on_hand, reorder_threshold, unit");
-    const flagged = ((materialData || []) as MaterialAlert[]).filter(
-      (m) => m.quantity_on_hand <= (m.reorder_threshold ?? 0)
-    );
+      .select("material_key, material_label, quantity_on_hand, reorder_threshold, unit");
+
+    const flagged = ((materialData || []) as (MaterialAlert & { material_key?: string })[])
+      .map((m) => {
+        if (m.material_key === "paper_8.5x11") {
+          const sheetsOnHand = m.quantity_on_hand * SHEETS_PER_REAM;
+          const reamsRemaining = Math.max(0, sheetsOnHand - sheetsUsedAllTime) / SHEETS_PER_REAM;
+          return { ...m, quantity_on_hand: reamsRemaining };
+        }
+        return m;
+      })
+      .filter((m) => m.quantity_on_hand <= 0 || m.quantity_on_hand < (m.reorder_threshold ?? 0));
     setAlerts(flagged);
 
     setLoading(false);
