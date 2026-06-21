@@ -109,6 +109,29 @@ export default function AdminBatchNew() {
       .update({ batch_id: batchId, photo_status: "batched" })
       .in("id", candidateItems.map((item) => item.photo_id));
 
+    // Auto-deduct components consumed by this batch — 1 shell + 1 mylar +
+    // 1 magnet backing per magnet printed. Paper and ink stay on the
+    // separate calculated/manual tracks already in /admin/inventory.
+    const componentKeys = ["shell", "mylar", "magnet_backing"];
+    const { data: componentRows } = await supabase
+      .from("material_inventory")
+      .select("id, material_key, quantity_on_hand")
+      .in("material_key", componentKeys);
+
+    if (componentRows) {
+      await Promise.all(
+        componentRows.map((row) =>
+          supabase
+            .from("material_inventory")
+            .update({
+              quantity_on_hand: Math.max(0, (row.quantity_on_hand || 0) - candidateItems.length),
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", row.id)
+        )
+      );
+    }
+
     router.push(`/admin/batches/${batchId}`);
   }
 
@@ -134,6 +157,9 @@ export default function AdminBatchNew() {
         </div>
         {partialCount > 0 && <div className="status yellow">Partial sheet warning: final sheet has {partialCount}/12 slots filled.</div>}
         <button disabled={busy || candidateItems.length === 0} onClick={createBatch}>Create New Batch</button>
+        <p className="small" style={{ marginTop: 8, color: "#888" }}>
+          Creating this batch will auto-deduct {candidateItems.length} shell + mylar + magnet backing units from Inventory.
+        </p>
       </div>
 
       <div className="card">
@@ -159,4 +185,3 @@ export default function AdminBatchNew() {
     </>
   );
 }
-

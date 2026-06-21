@@ -14,9 +14,18 @@ import {
   stateOf,
 } from "@/lib/productionBackend";
 
+type StatusEvent = {
+  id: string;
+  status_label: string | null;
+  status_key: string | null;
+  internal_note: string | null;
+  created_at: string;
+};
+
 export default function AdminOrderDetail({ orderNumber }: { orderNumber: string }) {
   const [order, setOrder] = useState<OrderRow | null>(null);
   const [photos, setPhotos] = useState<PhotoRow[]>([]);
+  const [events, setEvents] = useState<StatusEvent[]>([]);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
   const [tracking, setTracking] = useState("");
@@ -55,6 +64,13 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
 
     if (photoError) setMessage(photoError.message);
     else setPhotos((photoData || []) as PhotoRow[]);
+
+    const { data: eventData } = await supabase
+      .from("order_status_events")
+      .select("id, status_label, status_key, internal_note, created_at")
+      .eq("order_id", loadedOrder.id)
+      .order("created_at", { ascending: false });
+    setEvents((eventData || []) as StatusEvent[]);
   }
 
   async function updateOrder(values: Partial<OrderRow>, label: string) {
@@ -232,6 +248,26 @@ export default function AdminOrderDetail({ orderNumber }: { orderNumber: string 
           <button disabled={saving} onClick={() => updateOrder({ production_status: "ready_for_batch" }, "Ready for batch")}>Mark Ready For Batch</button>
         </div>
         <p className="small">Customer notes: {order.notes || "None"}</p>
+      </div>
+
+      <div className="card">
+        <h2>History</h2>
+        {events.length === 0 ? (
+          <p className="small" style={{ color: "#888" }}>No status changes recorded yet.</p>
+        ) : (
+          <table className="table">
+            <thead><tr><th>When</th><th>Status</th><th>Note</th></tr></thead>
+            <tbody>
+              {events.map((event) => (
+                <tr key={event.id}>
+                  <td className="small">{new Date(event.created_at).toLocaleString()}</td>
+                  <td><b>{event.status_label || event.status_key || "—"}</b></td>
+                  <td className="small">{event.internal_note || "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div className="card">
